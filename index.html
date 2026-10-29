@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0b0b0d">
+<title>FinOps Sentinel</title>
+<style>
+:root{--bg:#0b0b0d;--panel:#1b1919;--line:#302d31;--text:#f3efe8;--mute:#aaa39a;--amber:#ffb02e;--ember:#ff6a2b;--grad:linear-gradient(100deg,#ffb02e,#ff6a2b);color-scheme:dark}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--text);font:16px/1.6 system-ui,-apple-system,"Segoe UI",sans-serif}button,input{font:inherit}button,a{touch-action:manipulation}a{color:inherit}button{cursor:pointer}.hide{display:none!important}.grad{background:var(--grad);background-clip:text;-webkit-background-clip:text;color:transparent}.btn{display:inline-block;border:1px solid var(--line);border-radius:12px;padding:12px 18px;font-weight:750;text-decoration:none;text-align:center}.primary{background:var(--grad);border:0;color:#1b1004}.secondary{background:transparent;color:var(--text)}button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid var(--amber);outline-offset:3px}
+header{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--line)}nav{max-width:1100px;height:64px;margin:auto;padding:0 20px;display:flex;align-items:center;gap:12px}.brand{font-size:1.25rem;font-weight:850;margin-right:auto;color:var(--amber)}nav a{text-decoration:none;color:var(--mute);font-weight:650;padding:8px}nav a:hover{color:var(--amber)}#menuBtn{display:none;background:transparent;color:var(--text);border:0;font-weight:700}#menu{position:absolute;right:16px;top:58px;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:10px;min-width:180px}#menu a,#menu button{display:block;width:100%;text-align:left;padding:9px;text-decoration:none;background:transparent;color:var(--text);border:0}
+main{max-width:1100px;margin:auto;padding:34px 20px 70px}.page{display:none}.page.active{display:block}.hero h1{font-size:clamp(2.2rem,6vw,4rem);line-height:1.1;margin:12px 0}.hero p,.muted{color:var(--mute)}.hero p{max-width:65ch}.card{background:var(--panel);border:1px solid var(--line);border-top:2px solid var(--amber);border-radius:16px;padding:22px;margin:18px 0}.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}.grid.two{grid-template-columns:repeat(2,minmax(0,1fr))}.card p,.card li{color:var(--mute)}.card ul{padding-left:22px}.back{display:inline-block;margin-bottom:16px;color:var(--amber);text-decoration:none;font-weight:700}.calc{display:grid;grid-template-columns:1fr 1fr;gap:22px;align-items:center}.big{font-size:2.5rem;font-weight:850}.chat{height:min(540px,68vh);min-height:330px;display:flex;flex-direction:column;border:1px solid var(--line);border-radius:16px;overflow:hidden;background:var(--panel)}#log{flex:1;overflow:auto;padding:16px;display:flex;flex-direction:column;gap:10px}.msg{max-width:88%;padding:10px 13px;border-radius:14px;white-space:pre-wrap;overflow-wrap:anywhere}.user{align-self:flex-end;background:var(--grad);color:#1b1004}.bot{align-self:flex-start;background:var(--bg);border:1px solid var(--line)}.chatbar{display:flex;gap:8px;padding:12px;border-top:1px solid var(--line)}.chatbar input{min-width:0;flex:1}.chatbar input,.field{width:100%;padding:12px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--text)}.chips{display:flex;gap:8px;flex-wrap:wrap;padding:0 12px 12px}.chips button{background:transparent;border:1px solid var(--line);border-radius:30px;color:var(--mute);padding:6px 10px}
+#gate{min-height:calc(100vh - 64px);padding:24px;display:grid;place-items:center}.signup{width:min(940px,100%);display:grid;grid-template-columns:1fr 1fr;background:var(--panel);border:1px solid var(--line);border-radius:20px;overflow:hidden}.signup>section{padding:clamp(18px,4vw,32px);min-width:0}.signup label{display:block;margin:14px 0 6px;font-weight:650}.signup input{width:100%;padding:12px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--text)}.camera{position:relative;aspect-ratio:4/3;background:#000;border:1px solid var(--line);border-radius:16px;overflow:hidden;display:grid;place-items:center}.camera video,.camera img{width:100%;height:100%;object-fit:cover;display:block}.camera video{transform:scaleX(-1)}.camera .placeholder{position:absolute;inset:0;display:grid;place-items:center;text-align:center;padding:18px;color:#aaa}.row{display:grid;gap:10px;margin-top:12px}.row .btn{width:100%;padding:14px}.error{color:#ff8181;min-height:1.4em;font-size:.9rem;margin-top:8px}.hint{font-size:.88rem;color:var(--mute)}footer{max-width:1100px;margin:auto;padding:20px;color:var(--mute);border-top:1px solid var(--line)}
+@media(max-width:760px){nav .desktop{display:none}#menuBtn{display:block}.grid,.grid.two,.calc,.signup{grid-template-columns:1fr}.signup>section{padding:22px}.hero h1{font-size:2.5rem}main{padding-top:26px}.chatbar .btn{padding:10px 12px}}
+</style>
+</head>
+<body>
+<header><nav>
+  <a class="brand" href="#home" data-page="home">FinOps Sentinel</a>
+  <a class="desktop" href="#home" data-page="home">Home</a>
+  <a class="desktop" href="#tool" data-page="tool">AI Tool</a>
+  <a class="desktop" href="#about" data-page="about">About</a>
+  <a class="desktop" href="#finops" data-page="finops">How it works</a>
+  <a class="desktop btn primary" id="signupLink" href="#signup" data-page="signup">Sign up</a>
+  <button id="menuBtn" aria-expanded="false" aria-controls="menu">☰ Menu</button>
+  <span id="profile" class="hide muted" aria-label="Signed in"></span>
+</nav><div id="menu" class="hide">
+  <a href="#home" data-page="home">Home</a><a href="#tool" data-page="tool">AI Tool</a><a href="#about" data-page="about">About</a><a href="#finops" data-page="finops">How it works</a><a href="#signup" data-page="signup" id="mobileSignup">Sign up</a><button id="logout" class="hide">Log out</button>
+</div></header>
+
+<div id="gate" class="hide">
+  <div style="width:min(940px,100%)"><a href="#home" class="back">← Back to Home</a>
+  <div class="signup">
+    <section>
+      <h1>Create your <span class="grad">account</span></h1>
+      <p class="muted" id="gateNote">Sign up to use the AI Tool.</p>
+      <form id="signupForm" novalidate>
+        <label for="email">Email address</label><input id="email" type="email" autocomplete="email" placeholder="you@company.com" required>
+        <label for="password">Password</label><input id="password" type="password" autocomplete="new-password" minlength="8" placeholder="At least 8 characters" required>
+        <label for="confirm">Confirm password</label><input id="confirm" type="password" autocomplete="new-password" required>
+        <div id="signupError" class="error" role="alert"></div>
+        <button class="btn primary" style="width:100%;margin-top:8px" type="submit">Create account</button>
+      </form>
+      <p class="hint">Demo only: this page does not create a secure server account. Do not use a real password.</p>
+    </section>
+    <section>
+      <h3>Profile photo</h3>
+      <div class="camera">
+        <video id="video" autoplay playsinline muted class="hide"></video>
+        <img id="preview" alt="Profile photo preview" class="hide">
+        <div id="cameraPlaceholder" class="placeholder">Camera is off.<br>Turn it on or choose a photo.</div>
+      </div>
+      <p class="hint">Face the light and use a plain background. Live camera access requires HTTPS or localhost in a supported browser.</p>
+      <div class="row">
+        <button class="btn secondary" id="startCamera" type="button">Turn on camera</button>
+        <button class="btn primary hide" id="takeSnapshot" type="button">Take photo</button>
+        <button class="btn secondary hide" id="retake" type="button">Retake photo</button>
+        <button class="btn primary" id="phonePhoto" type="button">📷 Take photo (phone camera)</button>
+        <button class="btn secondary" id="uploadPhoto" type="button">Upload photo</button>
+        <input id="phoneFile" class="hide" type="file" accept="image/*" capture="user">
+        <input id="uploadFile" class="hide" type="file" accept="image/*">
+      </div>
+      <div id="cameraError" class="error" role="status" aria-live="polite"></div>
+    </section>
+  </div></div>
+</div>
+
+<div id="app"><main>
+<section class="page hero" id="page-home">
+  <span style="color:var(--amber);font-weight:750">AI-POWERED CLOUD COST OPTIMIZATION</span>
+  <h1>Stop paying for cloud <span class="grad">you aren’t using</span></h1>
+  <p>Upload billing data, identify idle or oversized cloud resources, and create clear reports with suggested next steps. Review every recommendation before making changes.</p>
+  <a class="btn primary" href="#tool" data-page="tool">Try the AI tool</a>
+  <a class="btn secondary" href="#finops" data-page="finops">How it works</a>
+  <a class="btn secondary" href="#signup" data-page="signup">Sign up</a>
+  <div class="card calc">
+    <div><h2>Minimize cloud waste</h2><p class="muted">Estimate possible waste using a simple 30% example. This is an illustration, not a guarantee.</p></div>
+    <div><label for="bill">Monthly cloud bill: <b id="billValue">$50,000</b></label><input id="bill" type="range" min="5000" max="500000" step="5000" value="50000" style="width:100%;accent-color:var(--amber)"><p class="muted">Illustrative 30% waste estimate</p><div id="waste" class="big grad">$15,000</div></div>
+  </div>
+  <div class="grid">
+    <article class="card"><h3>Economic impact</h3><ul><li>Find potentially wasted spend</li><li>Faster cost reviews</li><li>Clearer budgeting</li></ul></article>
+    <article class="card"><h3>Team impact</h3><ul><li>Less manual spreadsheet work</li><li>Reports for non-experts</li><li>More time for engineering</li></ul></article>
+    <article class="card"><h3>Environmental impact</h3><ul><li>Identify idle resources</li><li>Support efficient infrastructure use</li><li>Reduce unnecessary compute</li></ul></article>
+  </div>
+</section>
+<section class="page" id="page-tool">
+  <a href="#home" class="back" data-page="home">← Back to Home</a><h2>AI <span class="grad">assistant</span></h2>
+  <p class="muted">Ask about FinOps Sentinel by typing. Voice dictation works only in browsers that support speech recognition.</p>
+  <div class="chat"><div id="log" aria-live="polite"></div><div class="chips" id="chips"><button type="button">What does it do?</button><button type="button">Which clouds?</button><button type="button">Is it safe?</button><button type="button">Business model?</button></div>
+  <form id="chatForm" class="chatbar"><button id="mic" class="btn secondary" type="button" aria-label="Voice input">🎤</button><input id="chatInput" placeholder="Type a message…" autocomplete="off" aria-label="Message"><button class="btn primary" type="submit">Send</button></form></div><div id="chatError" class="error"></div>
+</section>
+<section class="page" id="page-about"><a href="#home" class="back" data-page="home">← Back to Home</a><h2>About</h2><div class="grid two">
+  <article class="card"><h3>Team</h3><p>Team Code Catalyst · Team ID DEX26020<br>Theme: AI &amp; Machine Learning<br>Category: Software</p></article>
+  <article class="card"><h3>Mission &amp; vision</h3><p>Help organizations reduce cloud waste with explainable recommendations and human review.</p></article>
+  <article class="card"><h3>Users</h3><p>FinOps, DevOps and finance teams at enterprises, start-ups and IT service providers.</p></article>
+  <article class="card"><h3>Business model</h3><p>Possible subscription tiers or a share of verified savings.</p></article></div>
+</section>
+<section class="page" id="page-finops"><a href="#home" class="back" data-page="home">← Back to Home</a><h2>How <span class="grad">FinOps Sentinel</span> works</h2><p class="muted">A proposed workflow for cloud cost analysis. This static demo does not connect to cloud accounts or run scripts.</p><div class="grid two">
+  <article class="card"><h3>1. Upload and clean</h3><p>Use billing exports and utilization metrics. Remove secrets and unnecessary personal data before analysis.</p></article>
+  <article class="card"><h3>2. Detect waste</h3><p>Look for idle, orphaned and over-provisioned resources using rules or validated analytics.</p></article>
+  <article class="card"><h3>3. Explain findings</h3><p>Summarize why a resource is flagged and show assumptions behind any savings estimate.</p></article>
+  <article class="card"><h3>4. Review changes</h3><p>Require backups, dry runs, least privilege and human approval before any cloud modification.</p></article></div>
+</section>
+</main></div>
+<footer>FinOps Sentinel · Demo prototype. Recommendations should be verified before use.</footer>
+
+<script>
+(() => {
+  'use strict';
+  const $ = s => document.querySelector(s);
+  let stream = null, photoData = null, signedIn = false, recognition = null;
+
+  function stopCamera() {
+    if (stream) { stream.getTracks().forEach(track => track.stop()); stream = null; }
+    const video = $('#video');
+    if (video) video.srcObject = null;
+  }
+  function showPhoto(src) {
+    photoData = src;
+    $('#preview').src = src;
+    $('#preview').classList.remove('hide');
+    $('#video').classList.add('hide');
+    $('#cameraPlaceholder').classList.add('hide');
+    $('#startCamera').classList.remove('hide');
+    $('#takeSnapshot').classList.add('hide');
+    $('#retake').classList.remove('hide');
+    stopCamera();
+  }
+  function resizePhoto(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onerror = () => reject(new Error('Could not read that photo. Try another image.'));
+      reader.onload = () => {
+        const img = new Image();
+        img.onerror = () => reject(new Error('That file is not a valid image.'));
+        img.onload = () => {
+          const side = Math.min(img.naturalWidth, img.naturalHeight);
+          const canvas = document.createElement('canvas');
+          canvas.width = canvas.height = 480;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, (img.naturalWidth-side)/2, (img.naturalHeight-side)/2, side, side, 0, 0, 480, 480);
+          resolve(canvas.toDataURL('image/jpeg', .85));
+        };
+        img.src = reader.result;
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+  $('#startCamera').addEventListener('click', async () => {
+    const err = $('#cameraError');
+    err.textContent = '';
+    if (!window.isSecureContext) {
+      err.textContent = 'Live camera is blocked because this page was opened as a local content:// file. Open the HTML from an HTTPS website (or localhost). You can still use “Take photo (phone camera)” or “Upload photo”.';
+      return;
+    }
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+      err.textContent = 'This browser does not provide live camera access. Use “Take photo (phone camera)” or “Upload photo”.';
+      return;
+    }
+    try {
+      stopCamera();
+      stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' }, audio: false });
+      const video = $('#video');
+      video.srcObject = stream;
+      video.classList.remove('hide');
+      $('#preview').classList.add('hide');
+      $('#cameraPlaceholder').classList.add('hide');
+      $('#startCamera').classList.add('hide');
+      $('#takeSnapshot').classList.remove('hide');
+      $('#retake').classList.add('hide');
+      await video.play();
+    } catch (e) {
+      stopCamera();
+      const messages = {
+        NotAllowedError: 'Camera permission was denied. Allow camera access for the website in Chrome site settings, then reload.',
+        PermissionDeniedError: 'Camera permission was denied. Allow camera access for the website, then reload.',
+        NotFoundError: 'No camera was found. Use Take photo or Upload photo.',
+        NotReadableError: 'The camera may be in use by another app. Close that app and try again.',
+        OverconstrainedError: 'The requested camera is unavailable. Try the phone camera option.'
+      };
+      err.textContent = messages[e.name] || 'Could not start the camera. Use Take photo (phone camera) or Upload photo.';
+      $('#cameraPlaceholder').classList.remove('hide');
+      $('#video').classList.add('hide');
+      $('#startCamera').classList.remove('hide');
+      $('#takeSnapshot').classList.add('hide');
+    }
+  });
+  $('#takeSnapshot').addEventListener('click', () => {
+    const video = $('#video');
+    if (!stream || !video.videoWidth) {
+      $('#cameraError').textContent = 'Camera is not ready yet. Wait a moment and try again.';
+      return;
+    }
+    const side = Math.min(video.videoWidth, video.videoHeight);
+    const canvas = document.createElement('canvas');
+    canvas.width = canvas.height = 480;
+    canvas.getContext('2d').drawImage(video, (video.videoWidth-side)/2, (video.videoHeight-side)/2, side, side, 0, 0, 480, 480);
+    showPhoto(canvas.toDataURL('image/jpeg', .85));
+    $('#cameraError').textContent = '';
+  });
+  $('#retake').addEventListener('click', () => {
+    photoData = null;
+    $('#preview').classList.add('hide');
+    $('#retake').classList.add('hide');
+    $('#cameraPlaceholder').classList.remove('hide');
+    $('#cameraPlaceholder').innerHTML = 'Camera is off.<br>Turn it on or choose a photo.';
+    $('#startCamera').classList.remove('hide');
+    $('#cameraError').textContent = '';
+  });
+  $('#phonePhoto').addEventListener('click', () => $('#phoneFile').click());
+  $('#uploadPhoto').addEventListener('click', () => $('#uploadFile').click());
+  async function handleFile(event) {
+    const file = event.target.files && event.target.files[0];
+    if (!file) return;
+    if (!file.type.startsWith('image/')) { $('#cameraError').textContent = 'Please choose an image file.'; return; }
+    try {
+      $('#cameraError').textContent = '';
+      showPhoto(await resizePhoto(file));
+    } catch (e) { $('#cameraError').textContent = e.message || 'Could not load photo.'; }
+    event.target.value = '';
+  }
+  $('#phoneFile').addEventListener('change', handleFile);
+  $('#uploadFile').addEventListener('change', handleFile);
+
+  function route() {
+    let id = (location.hash || '#home').slice(1);
+    if (!['home','tool','about','finops','signup'].includes(id)) id = 'home';
+    if (id === 'tool' && !signedIn) { id = 'signup'; $('#gateNote').textContent = 'Please create a demo account to open the AI Tool.'; }
+    if (id === 'signup' && signedIn) id = 'home';
+    const isSignup = id === 'signup';
+    $('#gate').classList.toggle('hide', !isSignup);
+    $('#app').classList.toggle('hide', isSignup);
+    document.querySelectorAll('.page').forEach(p => p.classList.toggle('active', p.id === 'page-' + id));
+    $('#menu').classList.add('hide');
+    $('#menuBtn').setAttribute('aria-expanded', 'false');
+    if (!isSignup) stopCamera();
+    window.scrollTo(0, 0);
+    if (id === 'tool' && !$('#log').children.length) addMessage('Hi! I’m the FinOps Sentinel assistant. Ask about its purpose, supported clouds, safety or business model.', 'bot');
+  }
+  document.addEventListener('click', e => {
+    const link = e.target.closest('a[data-page]');
+    if (!link) return;
+    const id = link.dataset.page;
+    if (id) { e.preventDefault(); location.hash = '#' + id; }
+  });
+  window.addEventListener('hashchange', route);
+  $('#menuBtn').addEventListener('click', () => {
+    const menu = $('#menu'), opening = menu.classList.contains('hide');
+    menu.classList.toggle('hide', !opening);
+    $('#menuBtn').setAttribute('aria-expanded', String(opening));
+  });
+
+  $('#signupForm').addEventListener('submit', e => {
+    e.preventDefault();
+    const email = $('#email').value.trim(), pw = $('#password').value, pw2 = $('#confirm').value;
+    const err = $('#signupError');
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) { err.textContent = 'Enter a valid email address.'; return; }
+    if (pw.length < 8) { err.textContent = 'Password must be at least 8 characters.'; return; }
+    if (pw !== pw2) { err.textContent = 'Passwords do not match.'; return; }
+    err.textContent = '';
+    // Demo only: never store the password. This is not real server-side authentication.
+    signedIn = true;
+    $('#signupLink').classList.add('hide');
+    $('#mobileSignup').classList.add('hide');
+    $('#logout').classList.remove('hide');
+    $('#profile').textContent = email;
+    $('#profile').classList.remove('hide');
+    if (photoData) {
+      try { sessionStorage.setItem('fs_demo_photo', photoData); } catch (_) {}
+    }
+    $('#signupForm').reset();
+    location.hash = '#home';
+  });
+  $('#logout').addEventListener('click', () => {
+    signedIn = false;
+    $('#signupLink').classList.remove('hide');
+    $('#mobileSignup').classList.remove('hide');
+    $('#logout').classList.add('hide');
+    $('#profile').classList.add('hide');
+    photoData = null;
+    try { sessionStorage.removeItem('fs_demo_photo'); } catch (_) {}
+    location.hash = '#home';
+  });
+  $('#bill').addEventListener('input', e => {
+    const n = Number(e.target.value), fmt = x => '$' + x.toLocaleString('en-US');
+    $('#billValue').textContent = fmt(n);
+    $('#waste').textContent = fmt(Math.round(n * .3));
+  });
+
+  const knowledge = [
+    [/(what|do|does|about|fin ?ops|sentinel|idea)/i, 'FinOps Sentinel is a proposed cloud-cost assistant that reviews billing exports and utilization metrics to identify potentially idle, orphaned or oversized resources.'],
+    [/(cloud|aws|azure|google|gcp|multi)/i, 'The concept targets AWS, Microsoft Azure and Google Cloud. This demo does not connect to those cloud accounts.'],
+    [/(safe|risk|delete|production|privacy|secur)/i, 'Use read-only access where possible, anonymize billing data, validate recommendations, use dry runs and backups, and require human approval before changes. This demo does not run cloud commands.'],
+    [/(business|price|pricing|model|revenue|cost|invest|cheap)/i, 'Possible business models include subscription tiers or a share of verified savings. Actual pricing has not been configured in this demo.'],
+    [/(save|saving|waste|30|money)/i, 'The calculator illustrates 30% of the monthly bill as a hypothetical waste estimate. Actual savings depend on the cloud environment and must be measured.'],
+    [/(tech|python|pandas|stack|llm|streamlit)/i, 'A possible implementation could use Python and Pandas for billing data, rules or ML for detection, and an LLM for explanations. This static HTML page is only a front-end demo.'],
+    
+    [/(hi|hello|hey)/i, 'Hello! Ask me about cloud coverage, safety, the calculator or the project concept.']
+  ];
+  function addMessage(text, type) {
+    const d = document.createElement('div');
+    d.className = 'msg ' + type; d.textContent = text;
+    $('#log').appendChild(d); $('#log').scrollTop = $('#log').scrollHeight;
+  }
+  function sendMessage(text) {
+    text = text.trim(); if (!text) return;
+    addMessage(text, 'user'); $('#chips').classList.add('hide');
+    const hit = knowledge.find(k => k[0].test(text));
+    addMessage(hit ? hit[1] : 'I can answer about the project purpose, supported clouds, safety, savings estimates or possible technology stack.', 'bot');
+  }
+  $('#chatForm').addEventListener('submit', e => { e.preventDefault(); sendMessage($('#chatInput').value); $('#chatInput').value = ''; });
+  $('#chips').addEventListener('click', e => { if (e.target.tagName === 'BUTTON') sendMessage(e.target.textContent); });
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  $('#mic').addEventListener('click', () => {
+    const err = $('#chatError'); err.textContent = '';
+    if (!SR) { err.textContent = 'Voice dictation is not supported in this browser. Type your message instead.'; return; }
+    if (recognition) { recognition.stop(); return; }
+    recognition = new SR(); recognition.lang = 'en-US'; recognition.interimResults = false;
+    recognition.onresult = e => { $('#chatInput').value = e.results[0][0].transcript; };
+    recognition.onerror = e => { err.textContent = e.error === 'not-allowed' ? 'Microphone permission was denied. Allow microphone access in browser settings.' : 'Voice input error: ' + e.error; };
+    recognition.onend = () => { recognition = null; if ($('#chatInput').value.trim()) { sendMessage($('#chatInput').value); $('#chatInput').value = ''; } };
+    try { recognition.start(); } catch (_) { recognition = null; err.textContent = 'Could not start voice input. Please try again.'; }
+  });
+
+  route();
+})();
+</script>
+</body>
+</html>
